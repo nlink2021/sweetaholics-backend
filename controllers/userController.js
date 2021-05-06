@@ -16,14 +16,16 @@ userController.signUp = async (req, res) => {
         state: req.body.state,
         zip: req.body.zip
       })
+      const userCart = await models.cart.create({
+          userId: u.id
+      })
+      await u.setCart(userCart)
       const encryptedId = jwt.sign({ userId: u.id }, process.env.JWT_SECRET)
       const user = {id: encryptedId, name: u.name, email: u.email, city: u.city, state: u.state, zip: u.zip}
-      res.json({message: 'Signed up', user:user })
+      res.json({message: 'Signed up', user:user , cart:userCart })
     } catch (error) {
-        console.log(error);
-        res.json({error})
-    //   res.status(400)
-    //   res.json({ error: 'You used that email already, silly.' })
+      res.status(400)
+      res.json({ error: 'You used that email already, silly.' })
     }
 }
 userController.login = async (req, res) => {
@@ -33,15 +35,17 @@ userController.login = async (req, res) => {
           email: req.body.email
         }
       })
+      const userCart = await u.getCart()  
       if (bcrypt.compareSync(req.body.password, u.password)) {
         const encryptedId = jwt.sign({ userId: u.id }, process.env.JWT_SECRET)
         const user = {id: encryptedId, name: u.name, email: u.email, city: u.city, state: u.state, zip: u.zip}
-        res.json({message: 'login successful', user: user })
+        res.json({message: 'login successful', user: user , userCart: userCart })
       }else{
         res.status(401)
         res.json({ error: 'Password is incorrect' })
       }
     } catch (error) {
+        console.log(error);
       res.status(400)
       res.json({ error: 'login failed' })
     }
@@ -54,7 +58,8 @@ userController.getUser = async(req,res) => {
         id: decryptedId.userId
       }})
       if(user){
-        res.json({message: 'found user', user: user})
+        const userCart = await user.getCart() 
+        res.json({message: 'found user', user: user, cart:userCart})
       }
       else{
         res.status(404).json({ message: 'user not found' })
