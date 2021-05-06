@@ -11,6 +11,7 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       models.user.hasMany(models.order)
+      models.user.belongsTo(models.cart)
 
     }
   };
@@ -20,7 +21,8 @@ module.exports = (sequelize, DataTypes) => {
     password: DataTypes.STRING,
     city: DataTypes.STRING,
     state: DataTypes.STRING,
-    zip: DataTypes.STRING
+    zip: DataTypes.STRING,
+    cartId: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'user',
