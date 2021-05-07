@@ -10,8 +10,10 @@ app.use(require('morgan')('tiny'))
 
 const userRoutes = require('./routes/userRoutes')
 const cartRoutes = require('./routes/cartRoutes')
+const paymentRoutes = require('./routes/paymentRoutes')
 app.use('/users', userRoutes)
 app.use('/cart', cartRoutes)
+app.use('/payment', paymentRoutes)
 
 const itemRoutes = require('./routes/itemRoutes')
 app.use('/items', itemRoutes)
@@ -24,3 +26,4 @@ app.listen(PORT, () => {
     console.log(`port running on PORT`)
   routesReport.print()
 })
+
