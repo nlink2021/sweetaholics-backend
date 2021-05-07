@@ -5,7 +5,7 @@ const itemArray = []
 class Item {
     constructor(name,image,description,price,type){
         this.name = name,
-        this.image = image
+        this.image = image,
         this.description = description,
         this.price = price,
         this.type = type,
