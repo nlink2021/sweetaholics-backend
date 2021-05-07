@@ -13,9 +13,7 @@ cartController.addItem = async(req,res) => {
         })
         const cart = await models.cart.findOne({where:{
             id: req.body.cartId
-        },
-            include: models.item
-        })
+        }})
         const items = await cart.getItems()
         res.json({message: 'item added', items: items })
     } catch (error) {
