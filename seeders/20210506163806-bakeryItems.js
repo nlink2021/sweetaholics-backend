@@ -3,9 +3,9 @@
 const itemArray = []
 
 class Item {
-    constructor(name,description,price,type){
+    constructor(name,image,description,price,type){
         this.name = name,
-        this.image = this.image
+        this.image = image,
         this.description = description,
         this.price = price,
         this.type = type,
