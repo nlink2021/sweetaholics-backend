@@ -23,7 +23,7 @@ orderController.create = async (req, res) => {
         })
         await user.addOrder(order)
         await order.reload()
-        res.json({order})
+        res.json({message:'order created', order})
     }catch (error) {
         res.json({error: error.message})
     }

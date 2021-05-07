@@ -54,12 +54,13 @@ userController.login = async (req, res) => {
 userController.getUser = async(req,res) => {
     try {
         const decryptedId = jwt.verify(req.headers.authorization, process.env.JWT_SECRET)
-        const user = await models.user.findOne({where:{
+        const u = await models.user.findOne({where:{
         id: decryptedId.userId
         },
         include: models.cart
     })
-      if(user){
+      if(u){
+        const user = {id: req.headers.authorization, name: u.name, email: u.email, city: u.city, state: u.state, zip: u.zip, cart:u.cart}
         res.json({message: 'found user', user: user})
       }
       else{
