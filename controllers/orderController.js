@@ -1,3 +1,6 @@
+require('dotenv').config()
+const jwt = require('jsonwebtoken')
+const bcrypt = require('bcrypt')
 const models = require('../models')
 
 const orderController = {}
@@ -5,18 +8,22 @@ const orderController = {}
 //create an order
 orderController.create = async (req, res) => {
     try {
-        const user = await models.user.findOne ({
-            where: {id: req.body.userId}
-        })
+        const decryptedId = jwt.verify(req.headers.authorization, process.env.JWT_SECRET)
+        const user = await models.user.findOne({where:{
+        id: decryptedId.userId
+        }})
+        const date = new Date()
         const order = await models.order.create ({
-            order: req.body.order,
-            date:req.body.date,
-            total: req.body.total,
-        },
-       )
-       console.log(typeof user.total, typeof req.body.date)
+            date: date.toString(),
+            address: req.body.address,
+            city: req.body.city,
+            state: req.body.state,
+            zip: req.body.zip,
+            total: req.body.total
+        })
+        await user.addOrder(order)
+        await order.reload()
         res.json({order})
-
     }catch (error) {
         res.json({error: error.message})
     }
