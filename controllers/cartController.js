@@ -54,7 +54,20 @@ cartController.delete = async(req,res) =>{
         console.log(error);
     }
 }
+cartController.empty = async(req,res) =>{
+    try {
+        const deleted = await models.cartItem.destroy({where:{
+            cartId: req.body.cartId
+        }})
 
+        const cart = await models.cart.findOne({where:{
+            id: req.body.cartId
+        }})
+        res.json({message: 'cart emptied', cart })
+    } catch (error) {
+        res.json({error})
+    }
+}
 
 module.exports = cartController;
 

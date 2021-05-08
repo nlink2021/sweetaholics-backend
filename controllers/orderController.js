@@ -32,15 +32,44 @@ orderController.create = async (req, res) => {
 //get all orders
 orderController.getAll = async (req, res) => {
     try{
-        const order = await models.order.findAll()
-
-        res.json({order})
+        const decryptedId = jwt.verify(req.headers.authorization, process.env.JWT_SECRET)
+        const user = await models.user.findOne({where:{
+        id: decryptedId.userId
+        }})
+        const orders = await user.getOrders()
+        res.json({orders})
     }catch (error) {
         res.json({error: error.message})
     }
 }
 
+orderController.addItem = async(req,res) => {
+    try {
+        const added = await models.orderItem.create({
+            orderId: req.body.orderId,
+            itemId: req.body.itemId
+        })
+        const order = await models.order.findOne({where:{
+            id: req.body.orderId
+        }})
+        const items = await order.getItems()
+        res.json({message: 'item added', items: items })
+    } catch (error) {
+        res.json({error})
+    }
+}
 
+orderController.getItems = async(req,res) =>{
+    try {
+        const order = await models.order.findOne({where:{
+            id: req.body.orderId
+        }})
+        const items = await order.getItems()
+        res.json({items})
+    } catch (error) {
+        res.json({error})
+    }
+}
 
 
 
