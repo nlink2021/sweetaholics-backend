@@ -61,7 +61,7 @@ userController.getUser = async(req,res) => {
     })
       if(u){
         const user = {id: req.headers.authorization, name: u.name, email: u.email, city: u.city, state: u.state, zip: u.zip, cart:u.cart}
-        res.json({message: 'found user', user: user})
+        res.json({message: 'found user', user})
       }
       else{
         res.status(404).json({ message: 'user not found' })
