@@ -19,7 +19,9 @@ orderController.create = async (req, res) => {
             city: req.body.city,
             state: req.body.state,
             zip: req.body.zip,
-            total: req.body.total
+            total: req.body.total,
+            shipped: false
+
         })
         await user.addOrder(order)
         await order.reload()
@@ -30,13 +32,22 @@ orderController.create = async (req, res) => {
 }
 
 //get all orders
-orderController.getAll = async (req, res) => {
+orderController.userOrders = async (req, res) => {
     try{
         const decryptedId = jwt.verify(req.headers.authorization, process.env.JWT_SECRET)
         const user = await models.user.findOne({where:{
         id: decryptedId.userId
         }})
         const orders = await user.getOrders()
+        res.json({orders})
+    }catch (error) {
+        res.json({error: error.message})
+    }
+}
+
+orderController.getAll = async (req, res) => {
+    try{
+        const orders = await models.order.findAll()
         res.json({orders})
     }catch (error) {
         res.json({error: error.message})
@@ -66,6 +77,19 @@ orderController.getItems = async(req,res) =>{
         }})
         const items = await order.getItems()
         res.json({items})
+    } catch (error) {
+        res.json({error})
+    }
+}
+
+orderController.shipOrder = async(req,res) =>{
+    try {
+        const order = await models.order.findOne({where:{
+            id: req.body.orderId
+        }})
+        const shipped = await order.update({shipped: true})
+        await order.reload()
+        res.json({message: 'order shipped', shipped, order})
     } catch (error) {
         res.json({error})
     }

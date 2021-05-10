@@ -21,7 +21,8 @@ module.exports = (sequelize, DataTypes) => {
     city: DataTypes.STRING,
     state: DataTypes.STRING,
     zip: DataTypes.STRING,
-    total: DataTypes.INTEGER
+    total: DataTypes.INTEGER,
+    shipped: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'order',

@@ -14,18 +14,21 @@ userController.signUp = async (req, res) => {
         password: hashedPassword,
         city: req.body.city,
         state: req.body.state,
-        zip: req.body.zip
+        zip: req.body.zip,
+        isAdmin: false
       })
       const userCart = await models.cart.create({
           userId: u.id
       })
       await u.setCart(userCart)
       const encryptedId = jwt.sign({ userId: u.id }, process.env.JWT_SECRET)
-      const user = {id: encryptedId, name: u.name, email: u.email, city: u.city, state: u.state, zip: u.zip,cart:userCart}
+      const user = {id: encryptedId, name: u.name, email: u.email, city: u.city, state: u.state, zip: u.zip,cart:userCart, isAdmin: u.isAdmin}
       res.json({message: 'Signed up', user:user })
     } catch (error) {
-      res.status(400)
-      res.json({ error: 'You used that email already, silly.' })
+      console.log(error);
+      res.json({error})
+      // res.status(400)
+      // res.json({ error: 'You used that email already, silly.' })
     }
 }
 userController.login = async (req, res) => {
@@ -38,7 +41,7 @@ userController.login = async (req, res) => {
       })
       if (bcrypt.compareSync(req.body.password, u.password)) {
         const encryptedId = jwt.sign({ userId: u.id }, process.env.JWT_SECRET)
-        const user = {id: encryptedId, name: u.name, email: u.email, city: u.city, state: u.state, zip: u.zip, cart:u.cart}
+        const user = {id: encryptedId, name: u.name, email: u.email, city: u.city, state: u.state, zip: u.zip, cart:u.cart, isAdmin: u.isAdmin}
         res.json({message: 'login successful', user: user })
       }else{
         res.status(401)
@@ -46,8 +49,9 @@ userController.login = async (req, res) => {
       }
     } catch (error) {
         console.log(error);
-      res.status(400)
-      res.json({ error: 'login failed' })
+        res.json({error})
+      // res.status(400)
+      // res.json({ error: 'login failed' })
     }
 }
 
@@ -60,7 +64,7 @@ userController.getUser = async(req,res) => {
         include: models.cart
     })
       if(u){
-        const user = {id: req.headers.authorization, name: u.name, email: u.email, city: u.city, state: u.state, zip: u.zip, cart:u.cart}
+        const user = {id: req.headers.authorization, name: u.name, email: u.email, city: u.city, state: u.state, zip: u.zip, cart:u.cart,isAdmin: u.isAdmin}
         res.json({message: 'found user', user})
       }
       else{
