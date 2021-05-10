@@ -11,11 +11,9 @@ class Item {
         this.type = type,
         this.createdAt = new Date(),
         this.updatedAt = new Date()
-        
         itemArray.push(this)
     }
 }
-
 //cinnies
 new Item('Old Skool','https://www.cinnaholicedgewood.com/uploads/1/3/1/6/131608516/s674386858465580270_p1_i1_w1920.jpeg','Classic cinnamon roll with vanilla frosting', 3, 'Cinnamon Roll')
 new Item('Cookie Monster','https://www.cinnaholicedgewood.com/uploads/1/3/1/6/131608516/s674386858465580270_p83_i1_w1920.jpeg','Cream cheese frosting topped with homemade chocolate chip cookie dough, chocolate chips & chocolate sauce', 5, 'Cinnamon Roll')
@@ -32,23 +30,10 @@ new Item('Snickerdoodle','https://cdn1.insomniacookies.com/uploads/products/1200
 new Item('Chocolate Chunk Brownie','https://cdn1.insomniacookies.com/uploads/products/Brownies_ChocolateChipBrownie_1610142714.png','A chocolatey delight baked to perfection', 3, 'Brownie')
 new Item('Loaded Brownie','https://cdn1.insomniacookies.com/uploads/products/CookieButterBrownie_ProductImage_1200x1200_1618229747.png','A fudgy, chocolate chip brownie slathered in chocolate cookie butter for the ultimate sweet, rich snack.', 4, 'Brownie')
 
-
-
-
-
-
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    // **
-    //  * Add seed commands here.
-    //  *
-    //  * Example:
-    //  *
-    //  *
      await queryInterface.bulkInsert('items',
-     itemArray
-     , {});
-
+     itemArray, {});
   },
 
   down: async (queryInterface, Sequelize) => {
