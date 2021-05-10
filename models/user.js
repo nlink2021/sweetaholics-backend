@@ -22,7 +22,8 @@ module.exports = (sequelize, DataTypes) => {
     city: DataTypes.STRING,
     state: DataTypes.STRING,
     zip: DataTypes.STRING,
-    cartId: DataTypes.INTEGER
+    cartId: DataTypes.INTEGER,
+    isAdmin: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'user',

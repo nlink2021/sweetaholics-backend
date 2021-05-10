@@ -1,6 +1,5 @@
 const stripe = require('stripe')(process.env.STRIPE_KEY);
 
-
 const { v4: uuidv4 } = require('uuid');
 const payment = async (req,res)=>{
 	const {product,token} = req.body;
@@ -21,6 +20,5 @@ const payment = async (req,res)=>{
     .then(result =>res.status(200).json(result))
 .catch(err => console.log(err))
 }
-
 
 module.exports = payment
